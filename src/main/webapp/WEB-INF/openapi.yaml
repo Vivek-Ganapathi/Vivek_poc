@@ -1,0 +1,15 @@
+prettyPrint: true
+cacheTTL: 0
+openAPI:
+  servers:
+    - url: /poc1/webapi/
+  info:
+    version: '1.0'
+    title: Swagger application
+  components:
+    securitySchemes:
+      basicAuth:
+        type: http
+        scheme: basic
+  security:
+    - basicAuth: []

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This web.xml file is not required when using Servlet 3.0 container, 
+	see implementation details http://jersey.java.net/nonav/documentation/latest/jax-rs.html -->
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.wadl.disableWadl</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value> io.swagger.v3.jaxrs2.integration.resources,com.poc.application.poc1</param-value>
+		</init-param>
+
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/webapi/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>H2Console</servlet-name>
+		<servlet-class>org.h2.server.web.JakartaWebServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>H2Console</servlet-name>
+		<url-pattern>/h2/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<!-- use OpenApi servlet to serve spec -->
+		<servlet-name>OpenApi</servlet-name>
+		<servlet-class>io.swagger.v3.jaxrs2.integration.OpenApiServlet</servlet-class>
+
+		<!-- alternatively specify resource package <init-param> <param-name>openApi.configuration.resourcePackages</param-name> 
+			<param-value>com.fasterxml.jackson.jaxrs.json,io.swagger.sample.resource</param-value> 
+			</init-param> -->
+		<!-- <init-param> <param-name>openApi.configuration.location</param-name> 
+			<param-value>/openapi-configuration.json</param-value> </init-param> -->
+		<!-- alternatively include a file openapi-configuration.json or openapi-configuration.yaml 
+			in classpath -->
+
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>OpenApi</servlet-name>
+		<url-pattern>/openapi/*</url-pattern>
+	</servlet-mapping>
+	<filter>
+		<filter-name>ApiOriginFilter</filter-name>
+		<filter-class>com.poc.application.poc1.security.ApiOriginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ApiOriginFilter</filter-name>
+		<url-pattern>/openapi/*</url-pattern>
+	</filter-mapping>
+</web-app>
